@@ -1,7 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DollarSign, Package, Hash } from 'lucide-react';
 import { Product } from '../types/product';
 import { useForm } from '../hooks/useForm';
+import FormField from './form/FormField';
+import Input from './form/Input';
+import FormActions from './form/FormActions';
 
 interface ProductFormProps {
   initialValues?: Product;
@@ -47,79 +51,47 @@ export default function ProductForm({ initialValues, onSubmit, buttonText }: Pro
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label htmlFor="ProductName" className="block text-sm font-medium text-gray-700">
-          Product Name
-        </label>
-        <input
+      <FormField label="Product Name" error={errors.ProductName}>
+        <Input
           type="text"
-          id="ProductName"
           name="ProductName"
           value={values.ProductName}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          placeholder="Enter product name"
+          icon={<Package className="h-5 w-5 text-gray-400" />}
         />
-        {errors.ProductName && (
-          <p className="mt-1 text-sm text-red-600">{errors.ProductName}</p>
-        )}
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="Quantity" className="block text-sm font-medium text-gray-700">
-          Quantity
-        </label>
-        <input
+      <FormField label="Quantity" error={errors.Quantity}>
+        <Input
           type="number"
-          id="Quantity"
           name="Quantity"
           value={values.Quantity}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          placeholder="Enter quantity"
+          min="0"
+          icon={<Hash className="h-5 w-5 text-gray-400" />}
         />
-        {errors.Quantity && (
-          <p className="mt-1 text-sm text-red-600">{errors.Quantity}</p>
-        )}
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="Price" className="block text-sm font-medium text-gray-700">
-          Price
-        </label>
-        <div className="relative mt-1 rounded-md shadow-sm">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
-          <input
-            type="number"
-            step="0.01"
-            id="Price"
-            name="Price"
-            value={values.Price}
-            onChange={handleChange}
-            className="block w-full rounded-md border-gray-300 pl-7 focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
-        {errors.Price && (
-          <p className="mt-1 text-sm text-red-600">{errors.Price}</p>
-        )}
-      </div>
+      <FormField label="Price" error={errors.Price}>
+        <Input
+          type="number"
+          step="0.01"
+          name="Price"
+          value={values.Price}
+          onChange={handleChange}
+          placeholder="Enter price"
+          min="0"
+          icon={<DollarSign className="h-5 w-5 text-gray-400" />}
+        />
+      </FormField>
 
-      <div className="flex justify-end space-x-4">
-        <button
-          type="button"
-          onClick={() => navigate('/products')}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Saving...' : buttonText}
-        </button>
-      </div>
+      <FormActions
+        onCancel={() => navigate('/products')}
+        isSubmitting={isSubmitting}
+        submitText={buttonText}
+      />
     </form>
   );
 }
