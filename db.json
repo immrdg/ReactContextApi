@@ -1,0 +1,34 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "ProductName": "iPhone 15 Pro",
+      "Quantity": 10,
+      "Price": 999.99
+    },
+    {
+      "id": "2",
+      "ProductName": "MacBook Air M2",
+      "Quantity": 5,
+      "Price": 1299.99
+    },
+    {
+      "id": "3",
+      "ProductName": "AirPods Pro",
+      "Quantity": 20,
+      "Price": 249.99
+    },
+    {
+      "id": "4",
+      "ProductName": "iPad Air",
+      "Quantity": 8,
+      "Price": 599.99
+    },
+    {
+      "id": "cc54",
+      "ProductName": "Two",
+      "Quantity": 2,
+      "Price": 2
+    }
+  ]
+}
