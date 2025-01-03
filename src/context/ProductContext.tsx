@@ -4,6 +4,7 @@ import api from '../api/axios';
 
 interface ProductContextType {
   products: Product[];
+  allProducts: Product[];
   loading: boolean;
   error: string | null;
   currentPage: number;
@@ -20,7 +21,7 @@ interface ProductContextType {
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export function ProductProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,8 +31,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const fetchProducts = async () => {
     try {
       const { data } = await api.get<Product[]>('/products');
-      setProducts(data);
-      products.forEach(x=>console.log(x))
+      setAllProducts(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while fetching products');
     } finally {
@@ -43,16 +43,23 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(product =>
+  // Filter products based on search query
+  const filteredProducts = allProducts.filter(product =>
     product.ProductName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
+  // Get paginated products from filtered results
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const addProduct = async (product: Omit<Product, 'id'>) => {
     try {
       const { data } = await api.post<Product>('/products', product);
-      setProducts(prev => [...prev, data]);
+      setAllProducts(prev => [...prev, data]);
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to add product');
     }
@@ -61,7 +68,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const updateProduct = async (product: Product) => {
     try {
       await api.put(`/products/${product.id}`, product);
-      setProducts(prev => prev.map(p => p.id === product.id ? product : p));
+      setAllProducts(prev => prev.map(p => p.id === product.id ? product : p));
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to update product');
     }
@@ -70,14 +77,15 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const deleteProduct = async (id: number) => {
     try {
       await api.delete(`/products/${id}`);
-      setProducts(prev => prev.filter(p => p.id !== id));
+      setAllProducts(prev => prev.filter(p => p.id !== id));
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to delete product');
     }
   };
 
   const value = {
-    products: filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    products: paginatedProducts,
+    allProducts: filteredProducts,
     loading,
     error,
     currentPage,
