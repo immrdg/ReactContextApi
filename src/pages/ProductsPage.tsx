@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, Loader2, Plus, Search } from 'lucide-react';
+import { Package, Loader2, Plus } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import ProductTable from '../components/ProductTable';
 import Pagination from '../components/Pagination';
-import TableActions from '../components/TableActions';
+import ExportMenu from '../components/export/ExportMenu';
 import ConfirmDialog from '../components/ConfirmDialog';
 import ErrorMessage from '../components/ErrorMessage';
+import { generateCSV, downloadCSV, formatDate } from '../utils/exportHelpers';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function ProductsPage() {
   
   const {
     products,
+    allProducts,
     loading,
     error,
     currentPage,
@@ -42,23 +44,12 @@ export default function ProductsPage() {
     }
   };
 
-  const handleExport = () => {
-    const csv = [
-      ['Product Name', 'Quantity', 'Price'],
-      ...products.map(product => [
-        product.ProductName,
-        product.Quantity,
-        product.Price
-      ])
-    ].map(row => row.join(',')).join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'products.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
+  const handleExport = (exportAll: boolean) => {
+    const dataToExport = exportAll ? allProducts : products;
+    const csv = generateCSV(dataToExport);
+    const date = formatDate();
+    const filename = `techstore_products_${exportAll ? 'full' : 'page'}_${date}.csv`;
+    downloadCSV(csv, filename);
   };
 
   if (loading) {
@@ -84,27 +75,30 @@ export default function ProductsPage() {
       </div>
 
       <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-4 flex-1">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
-            </div>
-            <TableActions onExport={handleExport} />
+        <div className="flex items-center justify-between gap-4">
+          <div className="relative max-w-md">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-4 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            />
           </div>
-          <button
-            onClick={() => navigate('/products/add')}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Add Product
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/products/add')}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Add Product
+            </button>
+            <ExportMenu 
+              onExport={handleExport}
+              totalItems={allProducts.length}
+              currentPageItems={products.length}
+            />
+          </div>
         </div>
       </div>
 
