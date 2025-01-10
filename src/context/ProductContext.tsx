@@ -48,7 +48,15 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     product.ProductName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  // Calculate total pages based on filtered results
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
+
+  // Adjust current page if it exceeds the new total pages after filtering
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [searchQuery, totalPages]);
 
   // Get paginated products from filtered results
   const paginatedProducts = filteredProducts.slice(
@@ -83,6 +91,12 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Wrapper for setSearchQuery that resets pagination
+  const handleSetSearchQuery = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
   const value = {
     products: paginatedProducts,
     allProducts: filteredProducts,
@@ -96,7 +110,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     updateProduct,
     deleteProduct,
     setCurrentPage,
-    setSearchQuery,
+    setSearchQuery: handleSetSearchQuery,
   };
 
   return (
