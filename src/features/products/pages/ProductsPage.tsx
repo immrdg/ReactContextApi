@@ -14,7 +14,7 @@ export default function ProductsPage() {
   const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
-  
+
   const {
     products,
     allProducts,
@@ -68,8 +68,9 @@ export default function ProductsPage() {
     return <ErrorMessage message={error} />;
   }
 
-  const showEmptyState = allProducts.length === 0;
-  const showNoResults = !showEmptyState && allProducts.length > 0 && products.length === 0;
+  const hasProducts = allProducts.length > 0;
+  const isSearchActive = searchQuery.trim() !== '';
+  const hasSearchResults = products.length > 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -87,7 +88,7 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      {!showEmptyState && (
+      {hasProducts && (
         <div className="bg-white p-4 rounded-lg shadow-md mb-6">
           <div className="flex items-center justify-between gap-4">
             <div className="relative max-w-md">
@@ -99,8 +100,8 @@ export default function ProductsPage() {
                 className="pl-4 pr-4 py-2 w-full rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
-            {products.length > 0 && (
-              <ExportMenu 
+            {hasSearchResults && (
+              <ExportMenu
                 onExport={handleExport}
                 totalItems={allProducts.length}
                 currentPageItems={products.length}
@@ -112,33 +113,33 @@ export default function ProductsPage() {
 
       <div className="space-y-6">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {showEmptyState ? (
+          {!hasProducts ? (
             <EmptyState type="no-products" />
-          ) : showNoResults ? (
+          ) : isSearchActive && !hasSearchResults ? (
             <EmptyState type="no-results" searchQuery={searchQuery} />
           ) : (
             <ProductTable products={products} onDelete={handleDelete} />
           )}
         </div>
 
-        {!showEmptyState && !showNoResults && products.length > 0 && (
-          <Pagination 
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
+          {hasSearchResults && (
+              <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+              />
+          )}
+        </div>
 
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        message="Are you sure you want to delete this product? This action cannot be undone."
-        onConfirm={confirmDelete}
-        onCancel={() => {
-          setShowDeleteDialog(false);
-          setProductToDelete(null);
-        }}
-      />
-    </div>
+        <ConfirmDialog
+            isOpen={showDeleteDialog}
+            message="Are you sure you want to delete this product? This action cannot be undone."
+            onConfirm={confirmDelete}
+            onCancel={() => {
+              setShowDeleteDialog(false);
+              setProductToDelete(null);
+            }}
+        />
+      </div>
   );
 }

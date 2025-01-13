@@ -44,9 +44,11 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Filter products based on search query
-  const filteredProducts = allProducts.filter(product =>
-    product.ProductName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = searchQuery.trim() === ''
+      ? allProducts
+      : allProducts.filter(product =>
+          product.ProductName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+      );
 
   // Calculate total pages based on filtered results
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
@@ -99,7 +101,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     products: paginatedProducts,
-    allProducts: filteredProducts,
+    allProducts,
     loading,
     error,
     currentPage,
