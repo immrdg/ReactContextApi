@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Package, ArrowLeft, Edit, Trash2 } from 'lucide-react';
-import { useProducts } from '../context/ProductContext';
-import ConfirmDialog from '../components/ConfirmDialog';
-import ErrorMessage from '../components/ErrorMessage';
+import { useProducts } from '../context/ProductContext.tsx';
+import ConfirmDialog from '../ui/ConfirmDialog.tsx';
+import ErrorMessage from '../ui/ErrorMessage.tsx';
 
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();

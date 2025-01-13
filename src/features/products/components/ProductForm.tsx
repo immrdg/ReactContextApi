@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DollarSign, Package, Hash } from 'lucide-react';
-import { Product } from '../types/product';
-import { useForm } from '../hooks/useForm';
-import FormField from './form/FormField';
-import Input from './form/Input';
-import FormActions from './form/FormActions';
+import { Product } from '../types/product.ts';
+import { useForm } from '../hooks/useForm.tsx';
+import FormField from '../ui/form/FormField.tsx';
+import Input from '../ui/form/Input.tsx';
+import FormActions from '../ui/form/FormActions.tsx';
 
 interface ProductFormProps {
   initialValues?: Product;

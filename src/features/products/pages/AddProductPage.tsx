@@ -1,7 +1,7 @@
 import React from 'react';
 import { Package } from 'lucide-react';
-import ProductForm from '../components/ProductForm';
-import { useProducts } from '../context/ProductContext';
+import ProductForm from '../components/ProductForm.tsx';
+import { useProducts } from '../context/ProductContext.tsx';
 
 export default function AddProductPage() {
   const { addProduct } = useProducts();

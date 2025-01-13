@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, Loader2, Plus } from 'lucide-react';
-import { useProducts } from '../context/ProductContext';
-import ProductTable from '../components/ProductTable';
-import Pagination from '../components/Pagination';
-import ExportMenu from '../components/export/ExportMenu';
-import ConfirmDialog from '../components/ConfirmDialog';
-import ErrorMessage from '../components/ErrorMessage';
-import EmptyState from '../components/EmptyState';
-import { generateCSV, downloadCSV, formatDate } from '../utils/exportHelpers';
+import { useProducts } from '../context/ProductContext.tsx';
+import ProductTable from '../components/ProductTable.tsx';
+import Pagination from '../ui/Pagination.tsx';
+import ExportMenu from '../ui/export/ExportMenu.tsx';
+import ConfirmDialog from '../ui/ConfirmDialog.tsx';
+import ErrorMessage from '../ui/ErrorMessage.tsx';
+import EmptyState from '../components/EmptyState.tsx';
+import { generateCSV, downloadCSV, formatDate } from '../utils/exportHelpers.ts';
 
 export default function ProductsPage() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product } from '../types/product';
-import api from '../api/axios';
+import { Product } from '../types/product.ts';
+import api from '../api/axios.ts';
 
 interface ProductContextType {
   products: Product[];

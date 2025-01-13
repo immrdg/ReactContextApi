@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, Edit, Trash2 } from 'lucide-react';
-import { Product } from '../types/product';
+import { Product } from '../types/product.ts';
 
 interface ProductTableProps {
   products: Product[];

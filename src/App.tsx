@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import AboutPage from './pages/AboutPage';
-import ProductsPage from './pages/ProductsPage';
-import AddProductPage from './pages/AddProductPage';
-import EditProductPage from './pages/EditProductPage';
-import ProductDetailsPage from './pages/ProductDetailsPage';
-import { ProductProvider } from './context/ProductContext';
+import Navigation from './components/Navigation.tsx';
+import AboutPage from './components/AboutPage.tsx';
+import ProductsPage from './features/products/pages/ProductsPage.tsx';
+import AddProductPage from './features/products/pages/AddProductPage.tsx';
+import EditProductPage from './features/products/pages/EditProductPage.tsx';
+import ProductDetailsPage from './features/products/pages/ProductDetailsPage.tsx';
+import { ProductProvider } from './features/products/context/ProductContext.tsx';
 
 function App() {
   return (

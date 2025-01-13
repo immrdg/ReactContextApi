@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileDown, ChevronDown } from 'lucide-react';
-import ExportMenuItem from './ExportMenuItem';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import ExportMenuItem from './ExportMenuItem.tsx';
+import { useClickOutside } from '../../hooks/useClickOutside.ts';
 
 interface ExportMenuProps {
   onExport: (exportAll: boolean) => void;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Package } from 'lucide-react';
-import ProductForm from '../components/ProductForm';
-import { useProducts } from '../context/ProductContext';
-import ErrorMessage from '../components/ErrorMessage';
+import ProductForm from '../components/ProductForm.tsx';
+import { useProducts } from '../context/ProductContext.tsx';
+import ErrorMessage from '../ui/ErrorMessage.tsx';
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
